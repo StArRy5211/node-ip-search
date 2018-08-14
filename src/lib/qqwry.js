@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const net = require('net');
 const gbk = require('gbk.js');
+const util = require('./util');
 
 class QQwry {
   constructor() {
@@ -31,9 +32,9 @@ class QQwry {
   }
 
   _locateLocation(indexOffset) {
-    const location = {};
     const locationOffset = this.raw.readUIntLE(indexOffset + 4, 3);
     const mode = this.raw.readUIntLE(locationOffset + 4, 1);
+    let area, isp;
 
     if (mode === 1) {
       const countryOffset = this.raw.readUIntLE(locationOffset + 5, 3);
@@ -42,28 +43,41 @@ class QQwry {
       if (subCountryMode === 2) {
         const subCountryOffset = this.raw.readUIntLE(countryOffset + 1, 3);
 
-        location.area = gbk.decode(this._getTextBuffer(subCountryOffset));
-        location.isp = gbk.decode(this._getISPBuffer(countryOffset + 4));
+        area = gbk.decode(this._getTextBuffer(subCountryOffset));
+        isp = gbk.decode(this._getISPBuffer(countryOffset + 4));
       } else {
         const countryBuffer = this._getTextBuffer(countryOffset);
         const areaBuffer = this._getISPBuffer(countryOffset + countryBuffer.length + 1);
 
-        location.area = gbk.decode(countryBuffer);
-        location.isp = gbk.decode(areaBuffer);
+        area = gbk.decode(countryBuffer);
+        isp = gbk.decode(areaBuffer);
       }
     } else if (mode === 2) {
       const countryOffset = this.raw.readUIntLE(locationOffset + 5, 3);
 
-      location.area = gbk.decode(this._getTextBuffer(countryOffset));
-      location.isp = gbk.decode(this._getISPBuffer(locationOffset + 8));
+      area = gbk.decode(this._getTextBuffer(countryOffset));
+      isp = gbk.decode(this._getISPBuffer(locationOffset + 8));
     } else {
       const countryBuffer = this._getTextBuffer(locationOffset + 4);
       const areaBuffer = this._getISPBuffer(locationOffset + 4 + countryBuffer.length + 1);
 
-      location.area = gbk.decode(countryBuffer);
-      location.isp = gbk.decode(areaBuffer);
+      area = gbk.decode(countryBuffer);
+      isp = gbk.decode(areaBuffer);
     }
 
+    return this._formatLocation(area, isp);
+  }
+
+  _formatLocation(area, isp) {
+    const location = {
+      isp,
+    };
+
+    const province = util.getProvince(area);
+
+    location.province = province.replace(/省|市|自治区|行政区/, '');
+    location.city = util.getCity(area.replace(new RegExp(`.*${province}`), '')) || location.province;
+    
     return location;
   }
 
