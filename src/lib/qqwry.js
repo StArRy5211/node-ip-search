@@ -18,7 +18,7 @@ class QQwry {
       return Promise.reject(new Error('invalid ip v4 address: ', ip))
     }
 
-    const _ip = this._convertIPtoInt32(ip);
+    const _ip = this._convertIPtoUInt32(ip);
 
     const indexOffset = this._locateIpIndexOffset(_ip); 
 
@@ -122,7 +122,7 @@ class QQwry {
     return mid;
   }
 
-  _convertIPtoInt32(ip) {
+  _convertIPtoUInt32(ip) {
     ip = ip.split('.');
     return (parseInt(ip[0]) << 24 | parseInt(ip[1]) << 16 | parseInt(ip[2]) << 8 | parseInt(ip[3])) >>> 0;
   }
