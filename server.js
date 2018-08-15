@@ -12,7 +12,7 @@ const server = http.createServer((req, res) => {
   const path = urlObj.pathname;
 
   if (path === '/api/ip') {
-    const ip = urlObj.query && urlObj.query.ip;
+    let ip = urlObj.query && urlObj.query.ip;
 
     if (!ip) {
       ip = req.headers['X-Real-IP'];
