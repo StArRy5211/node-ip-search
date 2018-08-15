@@ -1,4 +1,4 @@
- # Simple geo search server
+ # Simple ip search server
 
  ## Start
 

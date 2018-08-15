@@ -1,7 +1,7 @@
 {
-  "name": "node-geo-search",
+  "name": "node-ip-search",
   "version": "0.0.1",
-  "description": "simple geo search server",
+  "description": "simple ip search server",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
