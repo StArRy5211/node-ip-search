@@ -1,9 +1,16 @@
 const QQwry = require('../src/lib/qqwry');
+const Taobao = require('../src/lib/taobao');
 
-const a = new QQwry();
+const qqwry = new QQwry();
 
-console.log(a.search('223.71.87.228'));
-console.log(a.search('121.69.46.122'));
-console.log(a.search('60.9.64.0'));
-console.log(a.search('60.9.79.0'));
-console.log(a.search('60.9.52.0'));
+qqwry.search('223.71.87.228').then(result => console.log(result));
+qqwry.search('121.69.46.122').then(result => console.log(result));
+qqwry.search('60.9.64.0').then(result => console.log(result));
+qqwry.search('60.9.79.0').then(result => console.log(result));
+qqwry.search('60.9.52.0').then(result => console.log(result));
+
+const taobao = new Taobao();
+
+taobao.search('223.71.87.228').then(result => console.log(result));
+
+

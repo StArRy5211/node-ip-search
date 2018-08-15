@@ -15,7 +15,7 @@ class QQwry {
 
   search(ip) {
     if (!net.isIPv4(ip)) {
-      throw new Error('invalid ip v4 address: ', ip);
+      return Promise.reject(new Error('invalid ip v4 address: ', ip))
     }
 
     const _ip = this._convertIPtoInt32(ip);
@@ -23,12 +23,12 @@ class QQwry {
     const indexOffset = this._locateIpIndexOffset(_ip); 
 
     if (!indexOffset) {
-      return null;
+      return Promise.resolve(null);
     }
 
     const location = this._locateLocation(indexOffset);
 
-    return location;
+    return Promise.resolve(location);
   }
 
   _locateLocation(indexOffset) {
@@ -107,7 +107,7 @@ class QQwry {
 
       if (ip > temp) {
         begin = mid;
-      }else if (ip < temp) {
+      } else if (ip < temp) {
         if (mid === end) {
           mid -= 7;
           break;
@@ -128,8 +128,8 @@ class QQwry {
   }
 
   _getMiddleOffset(begin, end) {
-    const records = ((end - begin) / 7 >> 1) * 7 + begin;
-    return records ^ begin ? records : records + 7;
+    const offset = ((end - begin) / 7 >> 1) * 7 + begin;
+    return offset ^ begin ? offset : offset + 7;
   }
 }
 
