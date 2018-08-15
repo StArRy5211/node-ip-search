@@ -1,5 +1,5 @@
-const QQwry = require('../src/lib/qqwry');
-const Taobao = require('../src/lib/taobao');
+const QQwry = require('../lib/qqwry');
+const Taobao = require('../lib/taobao');
 
 const qqwry = new QQwry();
 
