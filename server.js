@@ -15,7 +15,7 @@ const server = http.createServer((req, res) => {
     let ip = urlObj.query && urlObj.query.ip;
 
     if (!ip) {
-      ip = req.headers['X-Real-IP'];
+      ip = req.headers['x-real-ip'];
     }
     
     if (!net.isIPv4(ip)) {
