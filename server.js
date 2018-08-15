@@ -14,11 +14,15 @@ const server = http.createServer((req, res) => {
   if (path === '/api/ip') {
     const ip = urlObj.query && urlObj.query.ip;
 
-    if (!ip || !net.isIPv4(ip)) {
+    if (!ip) {
+      ip = req.headers['X-Real-IP'];
+    }
+    
+    if (!net.isIPv4(ip)) {
       res.statusCode = 400;
       res.end('invalid param');
       return;
-    } 
+    }
 
     function sendResult(data) {
       res.statusCode = 200;
